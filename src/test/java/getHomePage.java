@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class getHomePage {
 
@@ -21,11 +22,13 @@ public class getHomePage {
                 .contentType(ContentType.HTML)
                 .assertThat()
                 .statusCode(200)
+                    // 3. Create an assertion using .body() to compare the text inside of a tag
+                .body("html.head.title", equalTo("Ten10 Store"))
 
                 .extract().response();
-        // TODO: compare the <title>Ten10 Store</title>
 
-        // 3. Print out the response body as a string
+
+        // 4. Print out the response body as a string
         System.out.println("StatusCode was 200");
         System.out.println(response.asString());
     }
