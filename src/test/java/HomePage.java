@@ -39,4 +39,24 @@ public class HomePage {
 //        System.out.println("Content-Type of response is : "+contentType);
 
     }
+
+    @Test
+    public void testStatusCode(){
+//1.SetthebaseURI
+        RestAssured.baseURI="http://3.11.77.136";
+
+//2.SendanHTTPGETrequestto/index.phpandextracttheresponse
+        Response response=
+                given()
+                        .when()
+                        .get("/jfjufhdgb%20gvdm")
+                        .then()
+                        .contentType(ContentType.HTML)
+                        .assertThat()
+                        .statusCode(404)
+                        .extract().response();
+
+        System.out.println("StatusCodewas404");
+
+    }
 }
