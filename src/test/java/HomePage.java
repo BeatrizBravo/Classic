@@ -7,45 +7,52 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class HomePage {
-
+    private String CLASSIC_URL = "http://3.11.77.136";
     @Test
-    public void testRestAssured() {
-        // 1. Set the base URI
-        RestAssured.baseURI = "http://3.11.77.136";
+    public void validateStatusCode200() {
+                // 1. Set the base URI
+        RestAssured.baseURI = CLASSIC_URL;
 
-        // 2. Send an HTTP GET request to /index.php and extract the response
+
+                // 2. Send an HTTP GET request to /index.php and extract the response
         Response response =
                 given()
                 .when()
                 .get("/index.php")
                 .then()
-                    .contentType(ContentType.HTML)//ValidatableResponseOptions methods.
+                    .contentType(ContentType.HTML)
                     .assertThat()
                     .statusCode(200)
                         // 3. Create an assertion using .body() to compare the text inside of a tag
                     .body("html.head.title", equalTo("Ten10 Store"))
                         .log().all()
                     .extract().response()
-                            ;
-
-
-
-        // 4. Print out the response body as a string
-
-        System.out.println("We are in the home page");
-
-
-//        String contentType = response.getContentType();
+                            ;}
+    @Test
+    public void validatingContentType(){
+       // String contentType = response.getContentType(); //check the scope of reponse
 //        System.out.println("Content-Type of response is : "+contentType);
+        System.out.println("contentType will go here");
 
+    }
+    @Test
+    public void validatingHeadTitle(){
+        System.out.println("head title will go here");
+    }
+
+
+
+    @Test
+    public void locatedInTheHomePage(){
+        System.out.println("We are in the home page"); //done
     }
 
     @Test
-    public void testStatusCode(){
-//1.SetthebaseURI
-        RestAssured.baseURI="http://3.11.77.136";
+    public void testStatusCode404(){
 
-//2.SendanHTTPGETrequestto/index.phpandextracttheresponse
+        RestAssured.baseURI= CLASSIC_URL;
+
+
         Response response=
                 given()
                         .when()
