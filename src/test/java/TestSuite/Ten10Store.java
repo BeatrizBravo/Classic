@@ -41,4 +41,8 @@ public class Ten10Store {
     public void incorrectUser() {
         signInPage.incorrectUser();
     }
+    @Test
+    public void correctUser() {
+        signInPage.correctUser();
+    }
 }
