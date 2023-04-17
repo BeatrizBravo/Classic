@@ -10,10 +10,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 public class HomePage {
 
-    @Test
-    public void testRestAssured() {
-        // 1. Set the base URI
-        RestAssured.baseURI = "http://3.11.77.136";
+    public String getHomePage() {
 
         // 2. Send an HTTP GET request to /index.php and extract the response
         Response response =
@@ -30,11 +27,7 @@ public class HomePage {
                     .extract().response()
                             ;
 
-
-
-        // 4. Print out the response body as a string
-
-        System.out.println("We are in the home page");
+        return "We are in the home page";
 
 
 //        String contentType = response.getContentType();
@@ -42,10 +35,8 @@ public class HomePage {
 
     }
 
-    @Test
-    public void testStatusCode(){
-//1.SetthebaseURI
-        RestAssured.baseURI="http://3.11.77.136";
+    public String testStatusCode400(){
+
 
 //2.SendanHTTPGETrequestto/index.phpandextracttheresponse
         Response response=
@@ -58,7 +49,7 @@ public class HomePage {
                         .statusCode(404)
                         .extract().response();
 
-        System.out.println("StatusCodewas404");
+        return "StatusCodewas404";
 
     }
 }
