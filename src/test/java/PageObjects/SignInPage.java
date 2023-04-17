@@ -11,6 +11,34 @@ import io.restassured.response.Response;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class SignInPage {
+public  class  SignInPage {
+
+    public String incorrectUser() {
+
+        //2.Send an HTTP GET request to /index.php and extract the response
+        Response response =
+                given().queryParam("controller","authentication")
+                        .queryParam("back","my-account")
+                        .contentType("multipart/form-data")
+                        .multiPart("back", "my-account")
+                        .multiPart("email", "notuser@gfdgd.com")
+                        .multiPart("password", "jdiasjds")
+                        .multiPart("submitLogin", "1")
+                        .when()
+                        .post("/index.php")
+                        .then()
+                        .contentType(ContentType.HTML)
+                        .assertThat()
+                        .statusCode(200)
+                        .body("html.body.main.section.div.div.section.section.section.div.ul.li", equalTo("Authentication failed."))
+                        .extract().response();
+
+
+        Document doc = Jsoup.parse(response.asString());
+        Element link = doc.select("li.alert.alert-danger").first();
+
+        return "Incorrect Authentication";
+    }
+
 
 }
