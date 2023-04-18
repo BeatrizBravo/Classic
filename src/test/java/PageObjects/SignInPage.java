@@ -1,17 +1,23 @@
 package PageObjects;
 
+import io.restassured.http.Cookies;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.junit.Assert;
 import org.junit.Test;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public  class  SignInPage {
+public  class  SignInPage extends BasePage {
 
     public String incorrectUser() {
 
@@ -30,15 +36,45 @@ public  class  SignInPage {
                         .contentType(ContentType.HTML)
                         .assertThat()
                         .statusCode(200)
-                        .body("html.body.main.section.div.div.section.section.section.div.ul.li", equalTo("Authentication failed."))
                         .extract().response();
 
 
         Document doc = Jsoup.parse(response.asString());
         Element link = doc.select("li.alert.alert-danger").first();
+        Assert.assertEquals("Authentication failed.", Objects.requireNonNull(link).text());
 
         return "Incorrect Authentication";
     }
+    public void correctUser() {
+        //1.Set the base URI
+        RestAssured.baseURI = "http://3.11.77.136";
+        //2.Send an HTTP GET request to /index.php and extract the response
+        Cookies signInCookies =
+                given().queryParam("controller","authentication")
+//                        .queryParam("create_account","1")
+                        .queryParam("back","my-account")
+                        .contentType("multipart/form-data")
+                        .multiPart("back", "my-account")
+                        .multiPart("email", "user@user.co.uk")
+                        .multiPart("password", "password")
+                        .multiPart("submitLogin", "1")
+                        .when()
+                        .post("/index.php")
+                        .then()
+                        .contentType(ContentType.HTML)
+                        .assertThat()
+                        .statusCode(302)
+                        .extract().response()
+                        .getDetailedCookies();
+        setSessionCookies(signInCookies);
 
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("controller", "my-account");
 
+        Response accountPageResponse = getRequest("/index.php", queryParams);
+
+                Document doc = Jsoup.parse(accountPageResponse.asString());
+        Element link = doc.select("a.account > span").first();
+        Assert.assertEquals("asd asd", Objects.requireNonNull(link).text());
+    }
 }
