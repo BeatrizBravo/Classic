@@ -1,5 +1,6 @@
 package PageObjects;
 
+import io.restassured.http.Cookies;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -46,7 +47,7 @@ public  class  SignInPage {
         //1.Set the base URI
         RestAssured.baseURI = "http://3.11.77.136";
         //2.Send an HTTP GET request to /index.php and extract the response
-        Response response =
+        Cookies signInCookies =
                 given().queryParam("controller","authentication")
                         .queryParam("back","my-account")
                         .contentType("multipart/form-data")
@@ -59,13 +60,25 @@ public  class  SignInPage {
                         .then()
                         .contentType(ContentType.HTML)
                         .assertThat()
-//                        .statusCode(200)
+                        .statusCode(302)
+                        .extract().response()
+                        .getDetailedCookies();
+        Response accountPageResponse =
+                given()
+                        .queryParam("controller", "my-account")
+                        .cookies(signInCookies)
+                        .when()
+                        .get("/index.php")
+                        .then()
+                        .contentType(ContentType.HTML)
+                        .assertThat()
+                        .statusCode(200)
                         .extract().response();
 
 
-//        Document doc = Jsoup.parse(response.asString());
-//        Element link = doc.select("div[class='text-sm-center'] a").first();
-//        Assert.assertEquals("Sign Out", Objects.requireNonNull(link).text());
+        Document doc = Jsoup.parse(accountPageResponse.asString());
+        Element link = doc.select("a.account > span").first();
+        Assert.assertEquals("asd asd", Objects.requireNonNull(link).text());
 
         return "Correct Authentication";
     }
