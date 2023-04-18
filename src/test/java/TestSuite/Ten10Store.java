@@ -3,25 +3,16 @@ package TestSuite;
 import PageObjects.HomePage;
 import PageObjects.SignInPage;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.request;
-import static org.hamcrest.CoreMatchers.equalTo;
 
 public class Ten10Store {
 
     HomePage homePage;
     SignInPage signInPage;
-
-
 
     @Before
     public  void setup() {
@@ -34,7 +25,7 @@ public class Ten10Store {
      @Test
      public void setHomePage(){
         homePage.getHomePage();
-        homePage.testStatusCode400();
+        homePage.testStatusCode404();
     }
 
     @Test
@@ -43,6 +34,7 @@ public class Ten10Store {
     }
     @Test
     public void correctUser() {
+        homePage.getHomePage();
         signInPage.correctUser();
     }
 }

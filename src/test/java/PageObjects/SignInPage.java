@@ -10,12 +10,14 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public  class  SignInPage {
+public  class  SignInPage extends BasePage {
 
     public String incorrectUser() {
 
@@ -43,13 +45,13 @@ public  class  SignInPage {
 
         return "Incorrect Authentication";
     }
-    public String correctUser() {
+    public void correctUser() {
         //1.Set the base URI
         RestAssured.baseURI = "http://3.11.77.136";
         //2.Send an HTTP GET request to /index.php and extract the response
         Cookies signInCookies =
                 given().queryParam("controller","authentication")
-                        .queryParam("back","my-account")
+                        .queryParam("create_account","1")
                         .contentType("multipart/form-data")
                         .multiPart("back", "my-account")
                         .multiPart("email", "user@user.co.uk")
@@ -60,26 +62,29 @@ public  class  SignInPage {
                         .then()
                         .contentType(ContentType.HTML)
                         .assertThat()
-                        .statusCode(302)
+                        .statusCode(200)
                         .extract().response()
                         .getDetailedCookies();
-        Response accountPageResponse =
-                given()
-                        .queryParam("controller", "my-account")
-                        .cookies(signInCookies)
-                        .when()
-                        .get("/index.php")
-                        .then()
-                        .contentType(ContentType.HTML)
-                        .assertThat()
-                        .statusCode(200)
-                        .extract().response();
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("controller", "my-account");
 
 
-        Document doc = Jsoup.parse(accountPageResponse.asString());
+        Response accountPageResponse = getRequest("/index.php", queryParams);
+//                given()
+//                        .queryParam("controller", "my-account")
+//                        .cookies(signInCookies)
+//                        .when()
+//                        .get("/index.php")
+//                        .then()
+//                        .contentType(ContentType.HTML)
+//                        .assertThat()
+//                        .statusCode(200)
+//                        .extract().response();
+
+
+                Document doc = Jsoup.parse(accountPageResponse.asString());
         Element link = doc.select("a.account > span").first();
         Assert.assertEquals("asd asd", Objects.requireNonNull(link).text());
-
-        return "Correct Authentication";
     }
 }
