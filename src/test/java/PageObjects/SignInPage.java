@@ -51,7 +51,8 @@ public  class  SignInPage extends BasePage {
         //2.Send an HTTP GET request to /index.php and extract the response
         Cookies signInCookies =
                 given().queryParam("controller","authentication")
-                        .queryParam("create_account","1")
+//                        .queryParam("create_account","1")
+                        .queryParam("back","my-account")
                         .contentType("multipart/form-data")
                         .multiPart("back", "my-account")
                         .multiPart("email", "user@user.co.uk")
@@ -62,26 +63,15 @@ public  class  SignInPage extends BasePage {
                         .then()
                         .contentType(ContentType.HTML)
                         .assertThat()
-                        .statusCode(200)
+                        .statusCode(302)
                         .extract().response()
                         .getDetailedCookies();
+        setSessionCookies(signInCookies);
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("controller", "my-account");
 
-
         Response accountPageResponse = getRequest("/index.php", queryParams);
-//                given()
-//                        .queryParam("controller", "my-account")
-//                        .cookies(signInCookies)
-//                        .when()
-//                        .get("/index.php")
-//                        .then()
-//                        .contentType(ContentType.HTML)
-//                        .assertThat()
-//                        .statusCode(200)
-//                        .extract().response();
-
 
                 Document doc = Jsoup.parse(accountPageResponse.asString());
         Element link = doc.select("a.account > span").first();

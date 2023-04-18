@@ -1,5 +1,6 @@
 package PageObjects;
 
+import io.restassured.http.Cookies;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.jsoup.Jsoup;
@@ -20,7 +21,9 @@ abstract class BasePage {
     public BasePage() {
         requestSpecification = given();
     }
-
+    public void setSessionCookies(Cookies cookies) {
+        requestSpecification.cookies(cookies);
+    }
     public Response getRequest(String path) {
         return requestSpecification
                 .when()
