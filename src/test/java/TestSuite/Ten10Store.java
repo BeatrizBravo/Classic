@@ -2,6 +2,7 @@ package TestSuite;
 
 import PageObjects.HomePage;
 import PageObjects.SignInPage;
+import PageObjects.StoreLocation;
 import io.restassured.RestAssured;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,7 @@ public class Ten10Store {
 
     HomePage homePage;
     SignInPage signInPage;
+    StoreLocation storeLocation;
 
     @Before
     public  void setup() {
@@ -20,6 +22,7 @@ public class Ten10Store {
         RestAssured.baseURI = "http://3.11.77.136";
         homePage = new HomePage();
         signInPage = new SignInPage();
+        storeLocation = new StoreLocation();
 
     }
      @Test
@@ -36,5 +39,10 @@ public class Ten10Store {
     public void correctUser() {
         homePage.getHomePage();
         signInPage.correctUser();
+    }
+    @Test
+    public void storeLocation(){
+        storeLocation.testRestAssured();
+
     }
 }
