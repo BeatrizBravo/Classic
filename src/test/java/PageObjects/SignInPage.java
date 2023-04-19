@@ -17,14 +17,14 @@ import java.util.Objects;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public  class  SignInPage extends BasePage {
+public class SignInPage extends BasePage {
 
-    public String incorrectUser() {
+    public void incorrectUser() {
 
-        //2.Send an HTTP GET request to /index.php and extract the response
+
         Response response =
-                given().queryParam("controller","authentication")
-                        .queryParam("back","my-account")
+                given().queryParam("controller", "authentication")
+                        .queryParam("back", "my-account")
                         .contentType("multipart/form-data")
                         .multiPart("back", "my-account")
                         .multiPart("email", "notuser@gfdgd.com")
@@ -43,16 +43,16 @@ public  class  SignInPage extends BasePage {
         Element link = doc.select("li.alert.alert-danger").first();
         Assert.assertEquals("Authentication failed.", Objects.requireNonNull(link).text());
 
-        return "Incorrect Authentication";
     }
+
     public void correctUser() {
-        //1.Set the base URI
+
         RestAssured.baseURI = "http://3.11.77.136";
-        //2.Send an HTTP GET request to /index.php and extract the response
+
         Cookies signInCookies =
-                given().queryParam("controller","authentication")
-//                        .queryParam("create_account","1")
-                        .queryParam("back","my-account")
+                given().queryParam("controller", "authentication")
+
+                        .queryParam("back", "my-account")
                         .contentType("multipart/form-data")
                         .multiPart("back", "my-account")
                         .multiPart("email", "user@user.co.uk")
@@ -73,7 +73,7 @@ public  class  SignInPage extends BasePage {
 
         Response accountPageResponse = getRequest("/index.php", queryParams);
 
-                Document doc = Jsoup.parse(accountPageResponse.asString());
+        Document doc = Jsoup.parse(accountPageResponse.asString());
         Element link = doc.select("a.account > span").first();
         Assert.assertEquals("asd asd", Objects.requireNonNull(link).text());
     }

@@ -19,14 +19,8 @@ public class HomePage extends BasePage {
     }
 
     public void testStatusCode404() {
-        Response response =
-                given()
-                        .when()
-                        .get("/jfjufhdgb%20gvdm")
-                        .then()
-                        .contentType(ContentType.HTML)
-                        .assertThat()
-                        .statusCode(404)
-                        .extract().response();
+        Response homePageResponse = getRequest("/jfjufhdgb%20gvdm");
+        Assert.assertEquals(404, homePageResponse.getStatusCode());
+
     }
 }

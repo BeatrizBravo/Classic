@@ -17,7 +17,7 @@ public class Ten10Store {
     StoreLocation storeLocation;
 
     @Before
-    public  void setup() {
+    public void setup() {
         // Setting BaseURI once
         RestAssured.baseURI = "http://3.11.77.136";
         homePage = new HomePage();
@@ -25,8 +25,9 @@ public class Ten10Store {
         storeLocation = new StoreLocation();
 
     }
-     @Test
-     public void setHomePage(){
+
+    @Test
+    public void setHomePage() {
         homePage.getHomePage();
         homePage.testStatusCode404();
     }
@@ -35,13 +36,15 @@ public class Ten10Store {
     public void incorrectUser() {
         signInPage.incorrectUser();
     }
+
     @Test
     public void correctUser() {
         homePage.getHomePage();
         signInPage.correctUser();
     }
+
     @Test
-    public void storeLocation(){
+    public void storeLocation() {
         storeLocation.testRestAssured();
 
     }

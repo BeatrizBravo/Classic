@@ -15,15 +15,15 @@ public class StoreLocation {
 
 
     public String testRestAssured() {
-//1.SetthebaseURI
+
         RestAssured.baseURI = "http://3.11.77.136";
 
-//2.SendanHTTPGETrequestto/index.phpandextracttheresponse
+
         Response response = given()
                 .when()
                 .get("/index.php?controller=stores")
                 .then()
-                .contentType(ContentType.HTML)//ValidatableResponseOptionsmethods.
+                .contentType(ContentType.HTML)
                 .assertThat()
                 .statusCode(200)
                 .body("html.head.title", equalTo("Stores"))

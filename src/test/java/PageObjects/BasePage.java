@@ -21,9 +21,11 @@ abstract class BasePage {
     public BasePage() {
         requestSpecification = given();
     }
+
     public void setSessionCookies(Cookies cookies) {
         requestSpecification.cookies(cookies);
     }
+
     public Response getRequest(String path) {
         return requestSpecification
                 .when()
@@ -31,13 +33,15 @@ abstract class BasePage {
                 .then()
                 .extract().response();
     }
+
     public Response getRequest(String path, Map<String, String> queryParameters) {
-        for (Map.Entry<String, String> entry: queryParameters.entrySet()) {
+        for (Map.Entry<String, String> entry : queryParameters.entrySet()) {
             requestSpecification
                     .queryParam(String.valueOf(entry.getKey()), entry.getValue());
         }
         return getRequest(path);
     }
+
     public String getElementText(Response response, String cssQuery) {
         Document doc = Jsoup.parse(response.asString());
         Element link = doc.select(cssQuery).first();
