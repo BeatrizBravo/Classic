@@ -1,5 +1,6 @@
 package TestSuite;
 
+import PageObjects.CreateAccount;
 import PageObjects.HomePage;
 import PageObjects.SignInPage;
 import PageObjects.StoreLocation;
@@ -15,6 +16,7 @@ public class Ten10Store {
     HomePage homePage;
     SignInPage signInPage;
     StoreLocation storeLocation;
+    CreateAccount createAccount;
 
     @Before
     public  void setup() {
@@ -23,7 +25,7 @@ public class Ten10Store {
         homePage = new HomePage();
         signInPage = new SignInPage();
         storeLocation = new StoreLocation();
-
+        createAccount = new CreateAccount();
     }
      @Test
      public void setHomePage(){
@@ -44,5 +46,9 @@ public class Ten10Store {
     public void storeLocation(){
         storeLocation.testRestAssured();
 
+    }
+    @Test
+    public void crateAccount(){
+        createAccount.createAccount();
     }
 }
